@@ -1,8 +1,9 @@
+
+import App from './App';
 import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
 import { hydrate } from 'react-dom';
 import theme from './theme';
-import { ThemeProvider } from '@material-ui/styles';
-import App from './App';
 
 hydrate(
   <ThemeProvider theme={theme}>
@@ -14,6 +15,9 @@ hydrate(
     const jssStyles = document.getElementById('jss-ssr');
     if (jssStyles && jssStyles.parentNode)
       jssStyles.parentNode.removeChild(jssStyles);
+
+    window["hydrated"] = true;
+    console.log("Done hydrating");
   }
 );
 

@@ -1,9 +1,16 @@
 import App from './App';
 import React from 'react';
 import express from 'express';
-import theme from './theme';
-import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
+import { ServerStyleSheets, ThemeProvider } from '@mui/styles';
 import { renderToString } from 'react-dom/server';
+import theme from './theme';
+
+import createEmotionServer from "@emotion/server/create-instance";
+import createCache from "@emotion/cache";
+
+function createEmotionCache() {
+  return createCache({ key: "css" });
+}
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -22,17 +29,17 @@ const jsScriptTagsFromAssets = (assets, entrypoint, extra = '') => {
 };
 
 export const renderApp = (req, res) => {
+  const cache = createEmotionCache();
+  const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
 
-  const sheets = new ServerStyleSheets();
   const markup = renderToString(
-    sheets.collect(
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    )
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   );
 
-  const css = sheets.toString();
+  const emotionChunks = extractCriticalToChunks(markup);
+  const emotionCss = constructStyleTagsFromChunks(emotionChunks);
 
   const html =
     // prettier-ignore
@@ -44,8 +51,8 @@ export const renderApp = (req, res) => {
       <title>Welcome to Razzle</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500">
+      ${emotionCss}
       ${cssLinksFromAssets(assets, 'client')}
-      ${css ? `<style id='jss-ssr'>${css}</style>` : ''}
   </head>
   <body>
       <div id="root">${markup}</div>
