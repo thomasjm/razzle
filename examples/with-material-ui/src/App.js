@@ -23,9 +23,17 @@ const App = () => {
     <Paper className={classes.root} elevation={4}>
       <h2>Login</h2>
 
-      <TextField label="Username"
-                 value={value}
-                 onChange={(event) => setValue(event.target.value)} />
+      <p>
+        value is: {value}
+      </p>
+
+      {/* <TextField label="Username" */}
+      {/*            value={value} */}
+      {/*            onChange={(event) => setValue(event.target.value)} /> */}
+
+      <input value={value}
+             onChange={(event) => setValue(event.target.value)} />
+
     </Paper>
   );
 };
