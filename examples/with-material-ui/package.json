@@ -4,15 +4,15 @@
   "license": "MIT",
   "scripts": {
     "start": "razzle start",
-    "build": "razzle build",
+    "build": "razzle build --noninteractive",
     "test": "razzle test --env=jsdom",
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "express": "^4.17.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@material-ui/styles": "^4.11.3",
