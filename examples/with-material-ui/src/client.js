@@ -1,15 +1,11 @@
 
 import App from "./App";
 import React from "react";
-import { hydrate } from "react-dom";
+import { hydrateRoot } from "react-dom/client";
 
-hydrate(
-  <App />,
-  document.getElementById("root"),
-  () => {
-    console.log("Done hydrating");
-  }
-);
+const container = document.getElementById("root");
+
+const root = hydrateRoot(container, <App />);
 
 if (module.hot) {
   module.hot.accept();
