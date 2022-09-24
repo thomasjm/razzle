@@ -1,8 +1,7 @@
+
 import App from './App';
 import React from 'react';
 import express from 'express';
-import theme from './theme';
-import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
 import { renderToString } from 'react-dom/server';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -22,17 +21,9 @@ const jsScriptTagsFromAssets = (assets, entrypoint, extra = '') => {
 };
 
 export const renderApp = (req, res) => {
-
-  const sheets = new ServerStyleSheets();
   const markup = renderToString(
-    sheets.collect(
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    )
+    <App />
   );
-
-  const css = sheets.toString();
 
   const html =
     // prettier-ignore
@@ -45,7 +36,6 @@ export const renderApp = (req, res) => {
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500">
       ${cssLinksFromAssets(assets, 'client')}
-      ${css ? `<style id='jss-ssr'>${css}</style>` : ''}
   </head>
   <body>
       <div id="root">${markup}</div>
